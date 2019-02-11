@@ -11,9 +11,9 @@ function NumberToWords(number){ // 12
 	var num = new String(number); // "12"
 	var splt = num.split(""); // "1", "2"
 	var newNumber = splt.reverse(); // "2", "1"
-	var first = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
-	var two = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-	var tens = ['', 'Ten', 'Twenty ', 'Thirty ', 'Forty ', 'Fifty ', 'Sixty ', 'Seventy ', 'Eighty ', 'Ninety '];
+	var first = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+	var two = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+	var tens = ['', 'ten', 'twenty ', 'thirty ', 'forty ', 'fifty ', 'sixty ', 'seventy ', 'eighty ', 'ninety '];
  
 	var word = new Array();
 	var count = 0;
@@ -27,9 +27,8 @@ function NumberToWords(number){ // 12
         else {
             word[count] = first[newNumber[i]];
         }
- 
 				word[count] = word[count];
- 
+
       	break;
  
 			case 1:
@@ -46,10 +45,12 @@ function NumberToWords(number){ // 12
 				else {
 					word[count] = first[newNumber[i]] + " Hundred ";
 				}
+
         break;
  
 			case 3:
 				Tens();
+
         break;
  
 			default: break;
