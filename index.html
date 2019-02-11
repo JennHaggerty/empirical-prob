@@ -4,20 +4,55 @@
 	<meta charset="UTF-8">
 </head>
 <body>
+	<label for="letter-input">Pick a Letter</label>
+	<input id="letter-input" type="text" required="yes" maxlength="1" onkeyup="javascript:validateForm();"></input>
+
 <script type="text/javascript">
 var maxNum = 123;
-var maxNumString = "";
+var theString = "";
+var letter = "";
 
-buildString(maxNum);
-console.log(maxNumString.length);
-console.log(maxNumString);
+buildString( maxNum ); //onetwothree...onehundredtwentythree
+findProbability('e');
 
+// BEGIN LOGS
+//console.log("letter: " + letter);
+//console.log("----- LOGS -----");
+console.log("theString.length : " + theString.length );
+//console.log("theString : " + theString );
+//console.log("----- END LOGS -----");
 // BEGIN FUNCTIONS 
+function validateForm(){
+	var formInput = document.getElementById('letter-input').value;
+
+  if (!/^[a-zA-Z]*$/g.test(formInput)) {
+    alert("Must be a letter.");
+    return false;
+  } else {
+		console.log("Form is valid.");
+	}
+}
+function findProbability(arr, err){ // e
+console.log("----- FINDING PROBABILITY -----");
+console.log("letter: " + arr);
+	if(typeof(arr) != "string"){
+		console.log("Argument not a string");
+		return err;
+	} else {
+		occurrenceOfLetter = theString.split(arr).length-1; // e = 233
+		probability = occurrenceOfLetter/theString.length; // 0.18866..
+	console.log("occurenceOfLetter: " + occurrenceOfLetter);
+	console.log("probability of Letter of 1: " + probability);
+	console.log("Source of truth of 1: " + occurrenceOfLetter + "/" + theString.length + " = " + occurrenceOfLetter/theString.length); // 0.18866..
+	console.log("----- END FINDING PROBABILITY -----");
+		return letter;
+	}
+}
 function buildString(arr){
 	for(var i = 1; i <= arr; i++) {
 		var convertedNum = NumberToWords(i); // one hundred twenty three
 	
-		maxNumString += convertedNum.replace(/\s/g,''); // onehundredtwentythree
+		theString += convertedNum.replace(/\s/g,''); // onehundredtwentythree
 	}
 }
 function NumberToWords(number){ // 123
