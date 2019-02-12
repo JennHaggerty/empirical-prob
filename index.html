@@ -2,58 +2,129 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://bootswatch.com/4/slate/bootstrap.css">
+	<style>
+		#theString {
+			word-wrap: break-word;
+		}
+		#accordion-btn {
+			width: 100%;
+			margin: 0 auto;
+		}
+		.closed {
+			display: none;
+		}
+		.open {
+			display: block;
+		}
+		.container {
+			padding: 10px;
+		}
+	</style>
+
 </head>
 <body>
-	<label for="letter-input">Pick a Letter</label>
-	<input id="letter-input" type="text" required="yes" maxlength="1" onkeyup="javascript:validateForm();"></input>
+	<div id="formContainer" class="container">
+		<div class="row">
+			<div class="col-sm">
+				<label for="letter-input">Pick a letter:</label>
+			</div>
+			<div class="col-sm">
+				<input id="letter-input" class="form-control" type="text" required="yes" maxlength="1" onkeyup="javascript:handleInput(this.value);"></input>
+			</div>
+		</div>
+	</div>
+
+	<div id="resultsContainer" class="container">
+		<div class="row">
+			<div class="col-sm">Empirical Probability: </div>
+			<div class="col-sm" id="results"></div>
+		</div>
+	</div>
+
+	<div id="accordionContainer" class="container">
+	  <div class="card">
+	    <div class="card-header">
+				<div class="row">
+					<div class="col-sm">
+	      		  <button id="accordion-btn" onclick="handleClick();" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+								String: <text id="numString">123</text>
+	      		  </button>
+					</div>
+<!-- new string form
+					<div class="col-sm"><input id="newNumInput" type="text" placeholder="New String?"></div>
+-->
+				</div>
+	    </div>
+	
+	    <div id="collapseOne" class="closed" aria-labelledby="headingOne" data-parent="#accordion">
+	      <div class="card-body" id="theString">
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 <script type="text/javascript">
-var maxNum = 123;
-var theString = "";
 var letter = "";
-
-buildString( maxNum ); //onetwothree...onehundredtwentythree
-findProbability('e');
-
+var theNumber = 123;
+var theString 	= buildString( theNumber ); //onetwothree...onehundredtwentythree
+//var probability = findProbability('e');
+outputString(theNumber);
 // BEGIN LOGS
 //console.log("letter: " + letter);
 //console.log("----- LOGS -----");
-console.log("theString.length : " + theString.length );
+//console.log("theString.length : " + theString.length );
 //console.log("theString : " + theString );
 //console.log("----- END LOGS -----");
 // BEGIN FUNCTIONS 
-function validateForm(){
-	var formInput = document.getElementById('letter-input').value;
+function outputString(arr){
+	var stringDiv = document.getElementById('theString');
+	var newString = buildString(arr);
+	stringDiv.innerHTML = newString;
+	return;
+}
+function handleInput(arr){
+	var letter = arr;
+	var probability = findProbability(arr);
+	var results = document.getElementById("results");
+	if (validateForm(letter) != false){
+		var classList = results.classList.contains("text-danger")
+									||results.classList.contains("text-warning")
+									||results.classList.contains("text-success"); 
+		if (classList) {
+			results.classList.remove("text-success");
+			results.classList.remove("text-danger");
+			results.classList.remove("text-warning");
+		}
+		if (probability < .01) {
+			results.classList.add("text-danger");
+		} else if (probability > .02 && probability < .03){
+			results.classList.add("text-warning");
+		} else {
+			results.classList.add("text-success");
+		}
 
-  if (!/^[a-zA-Z]*$/g.test(formInput)) {
-    alert("Must be a letter.");
-    return false;
-  } else {
-		console.log("Form is valid.");
+		results.innerHTML = probability;
 	}
 }
 function findProbability(arr, err){ // e
-console.log("----- FINDING PROBABILITY -----");
-console.log("letter: " + arr);
 	if(typeof(arr) != "string"){
 		console.log("Argument not a string");
 		return err;
 	} else {
 		occurrenceOfLetter = theString.split(arr).length-1; // e = 233
 		probability = occurrenceOfLetter/theString.length; // 0.18866..
-	console.log("occurenceOfLetter: " + occurrenceOfLetter);
-	console.log("probability of Letter of 1: " + probability);
-	console.log("Source of truth of 1: " + occurrenceOfLetter + "/" + theString.length + " = " + occurrenceOfLetter/theString.length); // 0.18866..
-	console.log("----- END FINDING PROBABILITY -----");
-		return letter;
+		return probability;
 	}
 }
 function buildString(arr){
+	var theString = '';
 	for(var i = 1; i <= arr; i++) {
 		var convertedNum = NumberToWords(i); // one hundred twenty three
 	
 		theString += convertedNum.replace(/\s/g,''); // onehundredtwentythree
 	}
+	return theString;
 }
 function NumberToWords(number){ // 123
 	var num = new String(number); // "123"
@@ -119,6 +190,32 @@ function NumberToWords(number){ // 123
 
 	//console.log(result);
 	return result;
+}
+function validateForm(arr){
+	var form = document.getElementById('letter-input');
+	var formInput = form.value;
+	var results = document.getElementById("results");
+	//var formInput = document.getElementById('letter-input').value;
+
+  if (!/^[a-zA-Z]*$/g.test(formInput)) {
+		form.className = 'form-control is-invalid'; 
+		results.innerHTML = "Must be a letter.";
+    return false;
+  } else if (formInput == '') {
+		form.className = 'form-control'; 
+		results.innerHTML = "";
+		return false;
+	} else {
+		return true;
+	}
+}
+function handleClick(e){ // because CDN can't be trusted to function
+var card = document.getElementById('collapseOne');
+	if(card.classList.contains('closed')){
+		card.className = "open";
+	} else {
+		card.className = "closed";
+	}
 }
 </script>
 <!-- BEGIN SOCKET.IO -->
