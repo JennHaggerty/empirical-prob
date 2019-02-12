@@ -2,14 +2,17 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://bootswatch.com/4/slate/bootstrap.css">
+	<link rel="stylesheet" href="https://bootswatch.com/4/sandstone/bootstrap.css">
 	<style>
-		#theString {
-			word-wrap: break-word;
+		@media only screen and (min-width: 900px) {
+			body {
+				width: 60%;
+				margin: 0 auto;
+			}
 		}
-		#accordion-btn {
-			width: 100%;
-			margin: 0 auto;
+
+		.container {
+			padding: 10px;
 		}
 		.closed {
 			display: none;
@@ -17,9 +20,41 @@
 		.open {
 			display: block;
 		}
-		.container {
-			padding: 10px;
+		.newString {
+			text-align: right;
+			padding: .5em 1.5em;
 		}
+
+		#accordion-btn {
+			width: 100%;
+			color: #343436;
+			background: #ffca28;
+			margin: 0 auto;
+			padding: 1em;
+			font-size: 14px;
+			font-weight: unset;
+			text-transform: inherit;
+			text-decoration: none;
+			text-shadow: unset;
+		} 
+		#accordion-btn:hover {
+			background: #d6ac2b;
+		}
+
+		#theString {
+			word-wrap: break-word;
+		}
+		#numString {
+			font-weight: bold;
+		}
+
+.form-control {
+	width: 10%;
+	display: inline-block;
+}
+.results-row {
+	text-align: center;
+}
 	</style>
 
 </head>
@@ -27,18 +62,20 @@
 	<div id="formContainer" class="container">
 		<div class="row">
 			<div class="col-sm">
-				<label for="letter-input">Pick a letter:</label>
-			</div>
-			<div class="col-sm">
-				<input id="letter-input" class="form-control" type="text" required="yes" maxlength="1" onkeyup="javascript:handleInput(this.value);"></input>
+				<label for="letter-input">Input a letter to find its empirical probability of being selected at random from the string below:</label>
+				<input id="letter-input" class="form-control letter" type="text" required="yes" maxlength="1" onkeyup="javascript:handleInput(this.value);"></input>
+				<div id="error" class="closed"></div>
 			</div>
 		</div>
 	</div>
 
-	<div id="resultsContainer" class="container">
-		<div class="row">
-			<div class="col-sm">Empirical Probability: </div>
-			<div class="col-sm" id="results"></div>
+	<div id="resultsContainer" class="container closed">
+		<div class="row results-row">
+			<div class="col-sm">
+				<h2>
+					Empirical Probability: <font id="results"></font>
+				</h2>
+			</div>
 		</div>
 	</div>
 
@@ -48,19 +85,21 @@
 				<div class="row">
 					<div class="col-sm">
 	      		  <button id="accordion-btn" onclick="handleClick();" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-								String: <text id="numString">123</text>
+								Click to see the string created by converting the number <text id="numString">123</text>
 	      		  </button>
 					</div>
-<!-- new string form
-					<div class="col-sm"><input id="newNumInput" type="text" placeholder="New String?"></div>
--->
 				</div>
 	    </div>
-	
 	    <div id="collapseOne" class="closed" aria-labelledby="headingOne" data-parent="#accordion">
 	      <div class="card-body" id="theString">
 	      </div>
 	    </div>
+			<div class="row">
+				<div class="col-sm newString">
+					<label for="new-string">Want to try a different number? (max: 999)</label> 
+					<input id="newString" class="form-control number" type="text" maxlength="3">
+				</div>
+			</div>
 	  </div>
 	</div>
 
@@ -68,43 +107,58 @@
 var letter = "";
 var theNumber = 123;
 var theString 	= buildString( theNumber ); //onetwothree...onehundredtwentythree
-//var probability = findProbability('e');
+var results = document.getElementById("results");
+
 outputString(theNumber);
 // BEGIN LOGS
 //console.log("letter: " + letter);
-//console.log("----- LOGS -----");
 //console.log("theString.length : " + theString.length );
 //console.log("theString : " + theString );
-//console.log("----- END LOGS -----");
 // BEGIN FUNCTIONS 
+function handleNumInput(arr){
+	var num = arr; // 999
+}
+function handleInput(arr){
+	var letter = arr; // e
+	var probability = findProbability(arr);
+
+	clearStyling(); // remove styling related to percentage
+
+	if (validateForm(letter) != false){
+		document.getElementById('resultsContainer').classList.remove('closed');
+
+		addStyling(probability); // color percentage
+
+		results.innerHTML = probability += "%"; // populate div
+	}
+	return;
+}
 function outputString(arr){
 	var stringDiv = document.getElementById('theString');
 	var newString = buildString(arr);
 	stringDiv.innerHTML = newString;
+
 	return;
 }
-function handleInput(arr){
-	var letter = arr;
-	var probability = findProbability(arr);
-	var results = document.getElementById("results");
-	if (validateForm(letter) != false){
-		var classList = results.classList.contains("text-danger")
-									||results.classList.contains("text-warning")
-									||results.classList.contains("text-success"); 
-		if (classList) {
-			results.classList.remove("text-success");
-			results.classList.remove("text-danger");
-			results.classList.remove("text-warning");
-		}
-		if (probability < .01) {
-			results.classList.add("text-danger");
-		} else if (probability > .02 && probability < .03){
-			results.classList.add("text-warning");
-		} else {
-			results.classList.add("text-success");
-		}
+function addStyling(arr){
+	var rounded = (arr * 100).toFixed(); // 0.1886 => 19
 
-		results.innerHTML = probability;
+	if (rounded < 3){
+		results.classList.add("text-danger");
+	} else if (rounded < 7) {
+		results.classList.add("text-warning");
+	} else {
+		results.classList.add("text-success");
+	}
+}
+function clearStyling(){
+	var classList = results.classList.contains("text-danger")
+								||results.classList.contains("text-warning")
+								||results.classList.contains("text-success"); 
+	if (classList) {
+		results.classList.remove("text-success");
+		results.classList.remove("text-danger");
+		results.classList.remove("text-warning");
 	}
 }
 function findProbability(arr, err){ // e
@@ -113,7 +167,8 @@ function findProbability(arr, err){ // e
 		return err;
 	} else {
 		occurrenceOfLetter = theString.split(arr).length-1; // e = 233
-		probability = occurrenceOfLetter/theString.length; // 0.18866..
+		probability = occurrenceOfLetter/theString.length; // 0.1886...
+		probability = probability.toFixed(2)*100; // 0.1886 => 0.19 => 19
 		return probability;
 	}
 }
@@ -195,19 +250,23 @@ function validateForm(arr){
 	var form = document.getElementById('letter-input');
 	var formInput = form.value;
 	var results = document.getElementById("results");
+	var errorDiv = document.getElementById("error");
 	//var formInput = document.getElementById('letter-input').value;
 
+	errorDiv.innerHTML = ""; // clear error msg
   if (!/^[a-zA-Z]*$/g.test(formInput)) {
 		form.className = 'form-control is-invalid'; 
-		results.innerHTML = "Must be a letter.";
+		errorDiv.classList.remove('closed'); // display err div
+		errorDiv.innerHTML = "Must be a letter."; // display err
     return false;
   } else if (formInput == '') {
 		form.className = 'form-control'; 
-		results.innerHTML = "";
+		results.innerHTML = ""; // clear results on empty string
 		return false;
 	} else {
-		return true;
+		form.className = 'form-control is-valid'; 
 	}
+	return;
 }
 function handleClick(e){ // because CDN can't be trusted to function
 var card = document.getElementById('collapseOne');
