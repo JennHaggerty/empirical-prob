@@ -4,25 +4,8 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://bootswatch.com/4/sandstone/bootstrap.css">
 	<style>
-		@media only screen and (min-width: 900px) {
-			body {
-				width: 60%;
-				margin: 0 auto;
-			}
-		}
-
-		.container {
-			padding: 10px;
-		}
-		.closed {
-			display: none;
-		}
-		.open {
-			display: block;
-		}
-		.newString {
-			text-align: right;
-			padding: .5em 1.5em;
+		body {
+			background-color: #f9f9f9;
 		}
 
 		#accordion-btn {
@@ -40,83 +23,134 @@
 		#accordion-btn:hover {
 			background: #d6ac2b;
 		}
-
 		#theString {
 			word-wrap: break-word;
 		}
-		#numString {
+		#accordion-num {
 			font-weight: bold;
 		}
 
-.form-control {
-	width: 10%;
-	display: inline-block;
-}
-.results-row {
-	text-align: center;
-}
+		.closed {
+			display: none;
+		}
+		.open {
+			display: block;
+		}
+		.num-input {
+			text-align: right;
+			padding: .5em 1.5em;
+		}
+		.form-control {
+			width: 15%;
+			display: inline-block;
+		}
+		.results-row {
+			text-align: center;
+		}
+		.wrapper {
+			background-color: white;
+			padding: 1em;
+			border-radius: 6px;
+		}
+		.newString {
+			text-align: right;
+			margin: .5em;
+		}
+		@media only screen and (max-width: 1024px) {
+			#error {
+				white-space: pre;
+				float: right;
+			}
+			body {
+				margin: 1em;
+			}
+			button#accordion-btn {
+			}
+			input#letter-input {
+				text-align: center;
+			  width: 100%;
+			}
+			.container-fluid {
+				margin: 40px 0;
+			}
+		}
+		@media only screen and (min-width: 1024px) {
+			body {
+				width: 60%;
+				margin: 0 auto;
+			}
+		}
 	</style>
-
 </head>
 <body>
-	<div id="formContainer" class="container">
-		<div class="row">
-			<div class="col-sm">
-				<label for="letter-input">Input a letter to find its empirical probability of being selected at random from the string below:</label>
-				<input id="letter-input" class="form-control letter" type="text" required="yes" maxlength="1" onkeyup="javascript:handleInput(this.value);"></input>
-				<div id="error" class="closed"></div>
+	<div class="wrapper">
+		<div id="resultsContainer" class="container-fluid">
+			<div class="row results-row">
+				<div class="col-sm">
+					<h2>
+						<span id="jumbospan1">
+							Find the Empirical Probability
+						</span>
+						<span id="jumbospan2" class="closed">
+							Empirical Probability: <font id="results"></font>
+						</span>
+					</h2>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div id="resultsContainer" class="container closed">
-		<div class="row results-row">
-			<div class="col-sm">
-				<h2>
-					Empirical Probability: <font id="results"></font>
-				</h2>
+		<div id="formContainer" class="container-fluid">
+			<div class="row">
+				<div class="col-sm">
+					<label for="letter-input">Input a letter to find its empirical probability of being selected at random from the string below:</label>
+					<input id="letter-input" class="form-control letter" type="text" required="yes" maxlength="1" onkeyup="javascript:handleInput(this.value);"></input>
+					<text id="error" class="closed text-danger"></text>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div id="accordionContainer" class="container">
-	  <div class="card">
-	    <div class="card-header">
+		<div id="accordionContainer" class="container-fluid">
+		  <div class="card">
+		    <div class="card-header">
+					<div class="row">
+						<div class="col-sm">
+		      		  <button id="accordion-btn" onclick="handleClick();" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+									Click to see the string created by converting the number <text id="accordion-num">123</text>
+		      		  </button>
+						</div>
+					</div>
+		    </div>
+		    <div id="collapseOne" class="closed" aria-labelledby="headingOne" data-parent="#accordion">
+		      <div class="card-body" id="theString"></div>
+		    </div>
 				<div class="row">
-					<div class="col-sm">
-	      		  <button id="accordion-btn" onclick="handleClick();" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-								Click to see the string created by converting the number <text id="numString">123</text>
-	      		  </button>
+					<div class="col-sm newString">
+						<label for="new-string">Want to try a different number? (max: 999)</label> 
+						<input id="num-input" class="form-control number" type="text" maxlength="3" onkeyup="javascript:handleNumInput(this.value);">
+					<text id="num-error" class="closed text-danger"></text>
 					</div>
 				</div>
-	    </div>
-	    <div id="collapseOne" class="closed" aria-labelledby="headingOne" data-parent="#accordion">
-	      <div class="card-body" id="theString">
-	      </div>
-	    </div>
-			<div class="row">
-				<div class="col-sm newString">
-					<label for="new-string">Want to try a different number? (max: 999)</label> 
-					<input id="newString" class="form-control number" type="text" maxlength="3">
-				</div>
-			</div>
-	  </div>
+		  </div>
+		</div>
 	</div>
 
 <script type="text/javascript">
-var letter = "";
 var theNumber = 123;
-var theString 	= buildString( theNumber ); //onetwothree...onehundredtwentythree
 var results = document.getElementById("results");
 
-outputString(theNumber);
-// BEGIN LOGS
+buildString(theNumber);
 //console.log("letter: " + letter);
 //console.log("theString.length : " + theString.length );
 //console.log("theString : " + theString );
 // BEGIN FUNCTIONS 
 function handleNumInput(arr){
 	var num = arr; // 999
+
+	validateNumForm(num);
+	buildString(num);
+	findProbability(num);
+
+	return;
 }
 function handleInput(arr){
 	var letter = arr; // e
@@ -124,20 +158,16 @@ function handleInput(arr){
 
 	clearStyling(); // remove styling related to percentage
 
+	//if(){}
 	if (validateForm(letter) != false){
 		document.getElementById('resultsContainer').classList.remove('closed');
+		document.getElementById('jumbospan1').classList.add('closed');
+		document.getElementById('jumbospan2').classList.remove('closed');
 
 		addStyling(probability); // color percentage
 
 		results.innerHTML = probability += "%"; // populate div
 	}
-	return;
-}
-function outputString(arr){
-	var stringDiv = document.getElementById('theString');
-	var newString = buildString(arr);
-	stringDiv.innerHTML = newString;
-
 	return;
 }
 function addStyling(arr){
@@ -162,13 +192,15 @@ function clearStyling(){
 	}
 }
 function findProbability(arr, err){ // e
+	var theString 	= document.getElementById( "theString" ).innerHTML; //onetwothree...onehundredtwentythree
 	if(typeof(arr) != "string"){
 		console.log("Argument not a string");
 		return err;
 	} else {
 		occurrenceOfLetter = theString.split(arr).length-1; // e = 233
 		probability = occurrenceOfLetter/theString.length; // 0.1886...
-		probability = probability.toFixed(2)*100; // 0.1886 => 0.19 => 19
+		//probability = probability.toFixed(2)*100; // 0.1886 => 0.19 => 19
+		probability = probability*100; // 0.1886 => 0.19 => 19
 		return probability;
 	}
 }
@@ -179,6 +211,9 @@ function buildString(arr){
 	
 		theString += convertedNum.replace(/\s/g,''); // onehundredtwentythree
 	}
+	var stringDiv = document.getElementById('theString');
+	stringDiv.innerHTML = theString;
+
 	return theString;
 }
 function NumberToWords(number){ // 123
@@ -246,25 +281,48 @@ function NumberToWords(number){ // 123
 	//console.log(result);
 	return result;
 }
-function validateForm(arr){
-	var form = document.getElementById('letter-input');
-	var formInput = form.value;
+function validateNumForm(arr){
+	var numForm = document.getElementById('num-input');
+	var numFormInput = numForm.value;
 	var results = document.getElementById("results");
-	var errorDiv = document.getElementById("error");
-	//var formInput = document.getElementById('letter-input').value;
 
+	var errorDiv = document.getElementById("num-error");
 	errorDiv.innerHTML = ""; // clear error msg
-  if (!/^[a-zA-Z]*$/g.test(formInput)) {
-		form.className = 'form-control is-invalid'; 
+
+  if (!/^[0-9]*$/g.test(numFormInput)) {
+		numForm.className = 'form-control is-invalid'; 
 		errorDiv.classList.remove('closed'); // display err div
-		errorDiv.innerHTML = "Must be a letter."; // display err
+		errorDiv.innerHTML = " Must be a number."; // display err
     return false;
-  } else if (formInput == '') {
-		form.className = 'form-control'; 
+  } else if (numFormInput == '') {
+		numForm.className = 'form-control'; 
 		results.innerHTML = ""; // clear results on empty string
 		return false;
 	} else {
-		form.className = 'form-control is-valid'; 
+		numForm.className = 'form-control is-valid'; 
+	}
+	return;
+}
+function validateForm(arr){
+	var letterForm = document.getElementById('letter-input');
+	var letterFormInput = letterForm.value;
+	var results = document.getElementById("results");
+	var errorDiv = document.getElementById("error");
+	//var letterFormInput = document.getElementById('letter-input').value;
+
+	errorDiv.innerHTML = ""; // clear error msg
+
+  if (!/^[a-zA-Z]*$/g.test(letterFormInput)) {
+		letterForm.className = 'form-control is-invalid'; 
+		errorDiv.classList.remove('closed'); // display err div
+		errorDiv.innerHTML = " Must be a letter."; // display err
+    return false;
+  } else if (letterFormInput == '') {
+		letterForm.className = 'form-control'; 
+		results.innerHTML = ""; // clear results on empty string
+		return false;
+	} else {
+		letterForm.className = 'form-control is-valid'; 
 	}
 	return;
 }
