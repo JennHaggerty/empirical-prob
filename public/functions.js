@@ -210,3 +210,8 @@ function handleClick(e){ // because CDN can't be trusted to function
 		card.className = "closed";
 	}
 }
+
+module.exports = {
+	NumberToWords: NumberToWords,
+	buildString: buildString
+}

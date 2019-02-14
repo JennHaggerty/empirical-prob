@@ -5,7 +5,8 @@
 	"dependencies": {
 		"express": "^4.16.4",
 		"mocha": "^5.2.0",
-		"npm": "^6.7.0",
+		"npm": "^6.8.0",
+		"puppeteer-core": "^1.12.2",
 		"socket.io": "^2.2.0"
 	},
 	"scripts": {
