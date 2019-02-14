@@ -60,8 +60,7 @@ function findProbability(arr, err){ // e
 	} else {
 		occurrenceOfLetter = theString.split(arr).length-1; // e = 233
 		probability = occurrenceOfLetter/theString.length; // 0.1886...
-		//probability = probability.toFixed(2)*100; // 0.1886 => 0.19 => 19
-		probability = probability*100; // 0.1886 => 0.19 => 19
+		probability = probability*100; // 0.1886 => 18.86
 		return probability;
 	}
 }
