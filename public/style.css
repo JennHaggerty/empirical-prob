@@ -1,0 +1,54 @@
+body {
+	background-color: #f9f9f9;
+}
+
+#accordion-btn {
+	width: 100%;
+	color: #343436;
+	background: #ffca28;
+	margin: 0 auto;
+	padding: 1em;
+	font-size: 14px;
+	font-weight: unset;
+	text-transform: inherit;
+	text-decoration: none;
+	text-shadow: unset;
+} 
+#accordion-btn:hover {
+	background: #d6ac2b;
+}
+#theString {
+	word-wrap: break-word;
+}
+#accordion-num {
+	font-weight: bold;
+}
+
+.closed {
+	display: none;
+}
+.open {
+	display: block;
+}
+.num-input {
+	text-align: right;
+	padding: .5em 1.5em;
+}
+.form-control {
+	width: 15%;
+	display: inline-block;
+}
+.results-row {
+	text-align: center;
+}
+.wrapper {
+	background-color: white;
+	padding: 1em;
+	border-radius: 6px;
+}
+.newString {
+	text-align: right;
+	margin: .5em;
+}
+@media only screen and (max-width: 1024px) {
+}

@@ -1,148 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://bootswatch.com/4/sandstone/bootstrap.css">
-	<style>
-		body {
-			background-color: #f9f9f9;
-		}
-
-		#accordion-btn {
-			width: 100%;
-			color: #343436;
-			background: #ffca28;
-			margin: 0 auto;
-			padding: 1em;
-			font-size: 14px;
-			font-weight: unset;
-			text-transform: inherit;
-			text-decoration: none;
-			text-shadow: unset;
-		} 
-		#accordion-btn:hover {
-			background: #d6ac2b;
-		}
-		#theString {
-			word-wrap: break-word;
-		}
-		#accordion-num {
-			font-weight: bold;
-		}
-
-		.closed {
-			display: none;
-		}
-		.open {
-			display: block;
-		}
-		.num-input {
-			text-align: right;
-			padding: .5em 1.5em;
-		}
-		.form-control {
-			width: 15%;
-			display: inline-block;
-		}
-		.results-row {
-			text-align: center;
-		}
-		.wrapper {
-			background-color: white;
-			padding: 1em;
-			border-radius: 6px;
-		}
-		.newString {
-			text-align: right;
-			margin: .5em;
-		}
-		@media only screen and (max-width: 1024px) {
-			#error {
-				white-space: pre;
-				float: right;
-			}
-			body {
-				margin: 1em;
-			}
-			button#accordion-btn {
-			}
-			input#letter-input {
-				text-align: center;
-			  width: 100%;
-			}
-			.container-fluid {
-				margin: 40px 0;
-			}
-		}
-		@media only screen and (min-width: 1024px) {
-			body {
-				width: 60%;
-				margin: 0 auto;
-			}
-		}
-	</style>
-</head>
-<body>
-	<div class="wrapper">
-		<div id="resultsContainer" class="container-fluid">
-			<div class="row results-row">
-				<div class="col-sm">
-					<h2>
-						<span id="jumbospan1">
-							Find the Empirical Probability
-						</span>
-						<span id="jumbospan2" class="closed">
-							Empirical Probability: <font id="results"></font>
-						</span>
-					</h2>
-				</div>
-			</div>
-		</div>
-
-		<div id="formContainer" class="container-fluid">
-			<div class="row">
-				<div class="col-sm">
-					<label for="letter-input">Input a letter to find its empirical probability of being selected at random from the string below:</label>
-					<input id="letter-input" class="form-control letter" type="text" required="yes" maxlength="1" onkeyup="javascript:handleInput(this.value);"></input>
-					<text id="error" class="closed text-danger"></text>
-				</div>
-			</div>
-		</div>
-
-		<div id="accordionContainer" class="container-fluid">
-		  <div class="card">
-		    <div class="card-header">
-					<div class="row">
-						<div class="col-sm">
-		      		  <button id="accordion-btn" onclick="handleClick();" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-									Click to see the string created by converting the number <text id="accordion-num">123</text>
-		      		  </button>
-						</div>
-					</div>
-		    </div>
-		    <div id="collapseOne" class="closed" aria-labelledby="headingOne" data-parent="#accordion">
-		      <div class="card-body" id="theString"></div>
-		    </div>
-				<div class="row">
-					<div class="col-sm newString">
-						<label for="new-string">Want to try a different number? (max: 999)</label> 
-						<input id="num-input" class="form-control number" type="text" maxlength="3" onkeyup="javascript:handleNumInput(this.value);">
-					<text id="num-error" class="closed text-danger"></text>
-					</div>
-				</div>
-		  </div>
-		</div>
-	</div>
-
-<script type="text/javascript">
-var theNumber = 123;
-var results = document.getElementById("results");
-
-buildString(theNumber);
-//console.log("letter: " + letter);
-//console.log("theString.length : " + theString.length );
-//console.log("theString : " + theString );
-// BEGIN FUNCTIONS 
 function handleNumInput(arr){
 	var num = arr; // 999
   var numDisplay = document.getElementById('accordion-num');
@@ -154,6 +9,7 @@ function handleNumInput(arr){
 
 	return;
 }
+
 function handleInput(arr){
 	var letter = arr; // e
 	var probability = findProbability(arr);
@@ -172,6 +28,7 @@ function handleInput(arr){
 	}
 	return;
 }
+
 function addStyling(arr){
 	var rounded = (arr * 100).toFixed(); // 0.1886 => 19
 
@@ -183,6 +40,7 @@ function addStyling(arr){
 		results.classList.add("text-success");
 	}
 }
+
 function clearStyling(){
 	var classList = results.classList.contains("text-danger")
 								||results.classList.contains("text-warning")
@@ -193,6 +51,7 @@ function clearStyling(){
 		results.classList.remove("text-warning");
 	}
 }
+
 function findProbability(arr, err){ // e
 	var theString 	= document.getElementById( "theString" ).innerHTML; //onetwothree...onehundredtwentythree
 	if(typeof(arr) != "string"){
@@ -206,6 +65,7 @@ function findProbability(arr, err){ // e
 		return probability;
 	}
 }
+
 function buildString(arr){
 	var theString = '';
 	for(var i = 1; i <= arr; i++) {
@@ -218,6 +78,7 @@ function buildString(arr){
 
 	return theString;
 }
+
 function NumberToWords(number){ // 123
 	var num = new String(number); // "123"
 	var splt = num.split(""); // "1", "2", "3"
@@ -283,6 +144,7 @@ function NumberToWords(number){ // 123
 	//console.log(result);
 	return result;
 }
+
 function validateNumForm(arr){
 	var numForm = document.getElementById('num-input');
 	var numFormInput = numForm.value;
@@ -305,6 +167,7 @@ function validateNumForm(arr){
 	}
 	return;
 }
+
 function validateForm(arr){
 	var letterForm = document.getElementById('letter-input');
 	var letterFormInput = letterForm.value;
@@ -328,22 +191,13 @@ function validateForm(arr){
 	}
 	return;
 }
+
 function handleClick(e){ // because CDN can't be trusted to function
-var card = document.getElementById('collapseOne');
+	var card = document.getElementById('collapseOne');
+
 	if(card.classList.contains('closed')){
 		card.className = "open";
 	} else {
 		card.className = "closed";
 	}
 }
-</script>
-<!-- BEGIN SOCKET.IO -->
-<script src="socket.io/socket.io.js"></script>
-<script type="text/javascript">
-	var socket = io();
-	socket.on('fileChanged', function(msg) {
-		document.location.reload(true);
-	});
-</script>
-</body>
-</html>
