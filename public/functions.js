@@ -2,10 +2,10 @@ function handleNumInput(arr){
 	var num = arr; // 999
   var numDisplay = document.getElementById('accordion-num');
 
-	numDisplay.innerHTML = num;
-	validateNumForm(num);
-	buildString(num);
-	findProbability(num);
+	numDisplay.innerHTML = num; // change number representation in button
+	validateNumForm(num); // make sure input is a number
+	buildString(num); // onetwothree...ninehundrednintynine
+	findProbability(num); 
 
 	return;
 }
@@ -68,13 +68,22 @@ function findProbability(arr, err){ // e
 
 function buildString(arr){
 	var theString = '';
+	var stringDiv = document.getElementById('theString');
+	var stringLengthDiv = document.getElementById('theStringLength');
+
 	for(var i = 1; i <= arr; i++) {
 		var convertedNum = NumberToWords(i); // one hundred twenty three
 	
 		theString += convertedNum.replace(/\s/g,''); // onehundredtwentythree
 	}
-	var stringDiv = document.getElementById('theString');
+	
 	stringDiv.innerHTML = theString;
+
+	if(theString.length > 0) {
+		stringLengthDiv.innerHTML = "The length of this string is " + theString.length + " characters long.";
+	} else {
+		stringLengthDiv.innerHTML = "There is no string.";
+	}
 
 	return theString;
 }

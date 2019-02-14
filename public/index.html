@@ -8,65 +8,67 @@
 </head>
 <body>
 	<div class="wrapper">
-		<div id="resultsContainer" class="container-fluid">
-			<div class="row results-row">
-				<div class="col-sm">
-					<h2>
-						<span id="jumbospan1">
-							Find the Empirical Probability
-						</span>
-						<span id="jumbospan2" class="closed">
-							Empirical Probability: <font id="results"></font>
-						</span>
-					</h2>
-				</div>
-			</div>
-		</div>
-
-		<div id="formContainer" class="container-fluid">
-			<div class="row">
-				<div class="col-sm">
-					<label for="letter-input">Input a letter to find its empirical probability of being selected at random from the string below:</label>
-					<input id="letter-input" class="form-control letter" type="text" required="yes" maxlength="1" onkeyup="javascript:handleInput(this.value);"></input>
-					<text id="error" class="closed text-danger"></text>
-				</div>
-			</div>
-		</div>
-
-		<div id="accordionContainer" class="container-fluid">
-		  <div class="card">
-		    <div class="card-header">
-					<div class="row">
-						<div class="col-sm">
-		      		  <button id="accordion-btn" onclick="handleClick();" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-									Click to see the string created by converting the number <text id="accordion-num">123</text>
-		      		  </button>
-						</div>
+		<section class="first-section">
+			<div id="resultsContainer" class="container-fluid">
+				<div class="row results-row">
+					<div class="col-sm">
+						<h2>
+							<span id="jumbospan1">
+								Find the Empirical Probability
+							</span>
+							<span id="jumbospan2" class="closed">
+								Empirical Probability: <font id="results"></font>
+							</span>
+						</h2>
 					</div>
-		    </div>
-		    <div id="collapseOne" class="closed" aria-labelledby="headingOne" data-parent="#accordion">
-		      <div class="card-body" id="theString"></div>
-		    </div>
+				</div>
+			</div>
+
+			<div id="formContainer" class="container-fluid">
 				<div class="row">
-					<div class="col-sm newString">
-						<label for="new-string">Want to try a different number? (max: 999)</label> 
-						<input id="num-input" class="form-control number" type="text" maxlength="3" onkeyup="javascript:handleNumInput(this.value);">
-					<text id="num-error" class="closed text-danger"></text>
-					</div>
+					<form class="col-sm">
+						<label for="letter-input">Input a letter to find its empirical probability of being selected at random from the string below:</label>
+						<input id="letter-input" class="form-control letter" type="text" required="yes" maxlength="1" onkeyup="javascript:handleInput(this.value);"></input>
+						<div id="error" class="closed text-danger"></div>
+					</form>
 				</div>
-		  </div>
-		</div>
+			</div>
+		</section>
+
+		<section class="second-section">
+			<div id="accordionContainer" class="container-fluid">
+			  <div class="card">
+			    <div class="card-header">
+						<div class="row">
+							<div class="col-sm">
+			      		  <button id="accordion-btn" onclick="handleClick();" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+										Click to see the string created by converting the number <text id="accordion-num">123</text>
+			      		  </button>
+							</div>
+						</div>
+			    </div>
+			    <div id="collapseOne" class="closed" aria-labelledby="headingOne" data-parent="#accordion">
+			      <div class="card-body">
+							<p id="theStringLength"></p>
+			      	<p id="theString"></p>
+						</div>
+			    </div>
+					<div class="row">
+						<form class="col-sm newString">
+							<label for="new-string">Want to try a different number? (max: 999)</label> 
+							<input id="num-input" class="form-control number" type="text" maxlength="1" onkeyup="javascript:handleNumInput(this.value);">
+							<div id="num-error" class="closed text-danger"></div>
+						</form>
+					</div>
+			  </div>
+			</div>
+		</section>
 	</div>
 
 <script type="text/javascript">
 var theNumber = 123;
-var results = document.getElementById("results");
 
 buildString(theNumber);
-//console.log("letter: " + letter);
-//console.log("theString.length : " + theString.length );
-//console.log("theString : " + theString );
-// BEGIN FUNCTIONS 
 </script>
 <!-- BEGIN SOCKET.IO -->
 <script src="socket.io/socket.io.js"></script>
