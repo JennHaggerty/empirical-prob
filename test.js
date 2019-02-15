@@ -23,24 +23,54 @@ describe('buildString', function() {
 	});
 });
 
-//describe('some test', function () {
-//	it('does stuff', function (done) {
-//	  server.listen(9876, function () {
-//console.log('server started!')
-//var webBrowser = puppeteer.launch();
-//webBrowser.then(function () {
-//	webBrowser.goto('localhost:9876').then(function () {
-//		webBrowser.input('input', '3').then(function() {
-//			webBrowser.click('button').then(function() {
-//				webBrowser.$('input').then(function(value) {
-//console.log('gete');
-//				});
-//			})
-//		})
-//	})
-//});
-//	  	server.close()
-//	  	done()
-//	  })
-//	})
-//})
+var puppeteer = require('puppeteer');
+describe('sample test with server and browser', function () {
+//	this.timeout(30000); // cheat to allow test to finish
+	var browser, page;
+
+	before(function(done){
+		var testOnlyPort = 3001;
+
+		console.log('starting test server')
+		server.listen(testOnlyPort, function() {
+			console.log('test server started')
+			puppeteer.launch().then(_browser => {				
+				browser = _browser;
+
+				console.log('open browser')
+				return browser.newPage();
+
+			}).then(_page => {
+				page = _page;
+
+				console.log('navigate to localhost:3000')
+				return page.goto('http://localhost:3001')
+			})
+			.then(() => {
+				console.log('flarp')
+				done();
+			});
+		});
+	})
+
+	after(function() {
+		console.log('browser closed, session terminated.')
+		return browser.close();
+	})
+
+	it('can chain test functions', function () {
+		console.log('select input')
+		return page.$('input')
+		.then(element => {
+			element.value = '3'
+
+			return page.click('button')
+		})
+		.then(() => {
+			return page.screenshot({ path: './example.png' })
+		})
+		.then(() => {
+			return browser.close();
+		})
+	})
+})
